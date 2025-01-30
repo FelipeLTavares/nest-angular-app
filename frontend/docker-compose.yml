@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  angular-app:
+    build: .
+    ports:
+      - "4200:4200"  # Mapeia a porta 4200 do contêiner para a porta 4200 do host
+    container_name: angular-app
+    restart: always
+    environment:
+      NODE_ENV: development  # Define o ambiente como desenvolvimento

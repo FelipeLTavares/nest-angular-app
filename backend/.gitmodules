@@ -1,0 +1,3 @@
+[submodule "simple-app-back"]
+	path = simple-app-back
+	url = https://github.com/FelipeLTavares/simple-app-back.git
