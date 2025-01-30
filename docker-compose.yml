@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Serviço do banco de dados (PostgreSQL)
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: poncetech
+    ports:
+      - '5432:5432'
+    networks:
+      - app-network
+
+  # Serviço do backend (API NestJS)
+  app:
+    build:
+      context: ./backend  # Diretório onde está o backend
+    command: npm run start:dev  # Comando para rodar o backend
+    ports:
+      - '3000:3000'  # Porta em que o backend vai rodar
+    depends_on:
+      - db  # O backend depende do banco de dados estar disponível
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://postgres:senha@db:5432/poncetech  # URL de conexão com o banco de dados (com o nome do serviço `db`)
+    networks:
+      - app-network
+
+  # Serviço do frontend (Angular)
+  frontend:
+    build:
+      context: ./frontend  # Diretório onde está o frontend
+    ports:
+      - '4200:4200'  # Expondo a porta 4200 do frontend Angular
+    networks:
+      - app-network
+    container_name: angular-app
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge
